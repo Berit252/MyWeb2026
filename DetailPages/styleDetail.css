@@ -1,0 +1,504 @@
+:root {
+    --bg-color: #121214;
+    --text-primary: #e0e0e0;
+    --accent-red: #ff5c5c;
+    
+    --font-header: "Black Ops One", system-ui;
+    --font-body: "Noto Sans SC", sans-serif;
+    --font-mono: "Roboto Mono", monospace;
+}
+
+body {
+    background-color: var(--bg-color);
+    /* 同样的战术网格背景 */
+    background-image: linear-gradient(#1a1a1a 1px, transparent 1px), linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    margin: 0;
+    /* 锁定整个页面，禁止外层滚动 */
+    overflow: hidden; 
+    height: 100vh;
+}
+
+/* --- Header --- */
+.detail-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.back-btn {
+    color: #666;
+    text-decoration: none;
+    font-family: var(--font-header);
+    font-size: 14px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.back-btn:hover { color: var(--accent-red); }
+.back-btn .arrow { font-size: 18px; }
+
+.header-meta {
+    font-family: var(--font-mono);
+    color: var(--accent-red);
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* --- Layout: Left Gallery / Right Info --- */
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* 左侧占2份，右侧占1份 */
+    gap: 40px;
+    height: calc(100vh - 140px); /* 充满剩余屏幕高度 */
+    overflow: hidden;
+}
+
+/* --- The New "Natural" Gallery --- */
+.gallery-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #333;
+    padding: 2px;
+    /* 四角装饰（可选） */
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Scroll Container */
+.gallery-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; /* 关键：强制横向捕捉 */
+    scroll-behavior: smooth;
+    width: 100%;
+    height: 100%; /* 填满区域 */
+    
+    /* 隐藏默认滚动条 */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+.gallery-scroll-container::-webkit-scrollbar { display: none; }
+
+/* Individual Slide */
+.gallery-item {
+    flex: 0 0 100%; /* 每个项目占满宽度 */
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: center; /* 滑动时停在中间 */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.gallery-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 保证图片完整显示不裁切 */
+}
+
+/* Video Styling */
+.video-item iframe {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/9;
+}
+
+/* Custom Scroll Indicator (The "Game" UI part) */
+.gallery-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 60%;
+    z-index: 10;
+}
+
+/* Custom Scroll Bar Track */
+.scroll-bar-track {
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+}
+
+/* The Moving Thumb */
+.scroll-bar-thumb {
+    width: 25%; /* Will be updated by JS */
+    height: 100%;
+    background: var(--accent-red);
+    position: absolute;
+    left: 0;
+    transition: left 0.1s; /* 快速响应 */
+    box-shadow: 0 0 10px var(--accent-red);
+}
+
+.gallery-counter {
+    font-family: var(--font-header);
+    color: #fff;
+    font-size: 14px;
+    background: rgba(0,0,0,0.6);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* --- Right Info Section --- */
+.info-section {
+    overflow-y: auto; /* 文字过长时可滚动 */
+    padding-right: 10px;
+    /* 滚动到底部时，specs-box 下面会有充足的空间，不会被遮挡 */
+    padding-bottom: 100px; 
+    /* 确保高度占满父容器 */
+    height: 100%;
+}
+/* 美化右侧文字的滚动条 (保持风格统一) */
+.info-section::-webkit-scrollbar {
+    width: 4px;
+}
+.info-section::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 2px;
+}
+.info-section::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-red);
+}
+
+.project-title {
+    font-family: var(--font-header);
+    font-size: 48px;
+    line-height: 1;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.divider-line {
+    width: 100%; height: 2px; background: #333; margin: 20px 0;
+}
+
+.text-body {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #ccc;
+    margin-bottom: 40px;
+}
+
+/* Specs Box */
+.specs-box {
+    border: 1px solid #333;
+    background: rgba(255,255,255,0.02);
+    padding: 20px;
+}
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 5px;
+}
+.spec-row .label { color: #666; }
+.spec-row .val { color: var(--accent-red); 
+    /* 强制文字右对齐 */
+    text-align: right;
+    
+    /* 确保内容占满剩余空间，但留出一点左边距 */
+    flex: 1; 
+    padding-left: 40px; /* 防止文字离左边的标签太近 */
+    
+    /* 保持单词完整换行，避免单词被切断 */
+    word-wrap: break-word;
+}
+
+/* --- Mobile Layout --- */
+@media (max-width: 768px) {
+    .content-wrapper {
+        grid-template-columns: 1fr; /* 单列布局 */
+        height: auto; /* 高度自适应 */
+        gap: 20px;
+    }
+    
+    /* 在手机上，让画廊有个固定的高宽比，比如 4:3 或 1:1 */
+    .gallery-section {
+        aspect-ratio: 4/3; 
+    }
+    
+    .project-title { font-size: 32px; }
+}
+
+/* Utility */
+.hidden { display: none; }
+
+
+/* --- Image Lightbox (放大查看器) --- */
+
+/* 1. 模态框背景 */
+.modal-overlay {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    z-index: 9999; /* 确保在最上层 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 12, 0.9); /* 深色半透明背景 */
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px); /* 背景模糊，更有质感 */
+}
+
+/* 2. 图片容器 */
+.modal-content-wrapper {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 3. 放大的图片 */
+.modal-content {
+    max-width: 100%;
+    max-height: 99vh;
+    object-fit: contain;
+    border: none;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+}
+
+/* 4. 关闭按钮 */
+.modal-close {
+    position: absolute;
+    top: 2%;
+    right: 40px;
+    color: #888;
+    font-family: var(--font-header);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 10000;
+}
+
+.modal-close:hover {
+    color: var(--accent-red);
+    text-shadow: 0 0 10px var(--accent-red);
+}
+
+/* 让原本的画廊图片变成“可点击”的手型 */
+.gallery-item img {
+    cursor: zoom-in; 
+}
+
+/* --- Video Scroll Fix (解决视频无法滚动问题) --- */
+/* 1. 包装器：确保遮罩层能盖在视频上 */
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+/* 2. 遮罩层：平时盖在视频上，透明 */
+.video-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* 比 iframe 高 */
+    background: transparent; /* 透明 */
+    cursor: pointer; /* 变成手型，提示可点击 */
+}
+/* 视频本身 */
+.video-wrapper iframe {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/9;
+}
+
+/* =========================================
+   MOBILE ADAPTATION (Detail Pages)
+   ========================================= */
+
+/* 1. 竖屏锁定层样式 (默认不显示) */
+#orientation-lock {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: #000;
+    z-index: 99999; /* 最高层级 */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--accent-red);
+    font-family: var(--font-header);
+}
+
+.lock-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+    animation: rotateIcon 2s infinite linear;
+}
+
+.lock-title {
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--accent-red);
+    padding-bottom: 5px;
+}
+
+.lock-msg {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: #666;
+    line-height: 1.5;
+}
+
+@keyframes rotateIcon {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-90deg); }
+    100% { transform: rotate(-90deg); }
+}
+
+/* 2. 【逻辑】检测竖屏手机 -> 显示锁定层 */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    #orientation-lock { display: flex; }
+    /* 隐藏后面所有内容 */
+    .detail-container, #imageModal { display: none !important; }
+}
+
+/* 3. 【逻辑】检测横屏手机 -> 界面极度缩小 (Mini Mode) - 修复遮挡版 */
+/* 针对高度很小（手机横过来）的情况 */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    
+    /* A. 容器与 Header 压缩 */
+    .detail-container {
+        padding: 5px 15px; /* 减小左右内边距 */
+        
+        /* 【关键修复 1】使用 dvh 替代 vh */
+        /* dvh (Dynamic Viewport Height) 会自动减去浏览器地址栏的高度 */
+        min-height: 100dvh; 
+        height: 100dvh;
+        overflow: hidden; /* 锁定外层，防止整个页面抖动 */
+        box-sizing: border-box;
+    }
+    
+    .detail-header {
+        padding: 5px 0; /* 压缩 Header 高度 */
+        margin-bottom: 5px;
+        height: 30px; /* 固定 Header 高度，方便计算 */
+        flex-shrink: 0; /* 防止 Header 被压缩 */
+    }
+    .back-btn { font-size: 10px; }
+    .back-btn .arrow { font-size: 12px; }
+    .header-meta { font-size: 10px; }
+
+    /* B. 布局调整：强制保持左右结构 */
+    .content-wrapper {
+        grid-template-columns: 1.4fr 1fr; /* 左图右文比例 */
+        gap: 15px;
+        
+        /* 【关键修复 2】精确计算剩余高度 */
+        /* 总高度 - Header - 上下Padding(约15px) - 底部安全距离 */
+        height: calc(100dvh - 40px); 
+        
+        overflow: hidden; /* 容器本身不滚动 */
+    }
+
+    /* C. 左侧画廊缩小 */
+    .gallery-section {
+        border-width: 1px;
+        height: 100%; /* 占满分配的高度 */
+    }
+    .gallery-counter {
+        font-size: 9px;
+        padding: 1px 4px;
+    }
+    .gallery-controls {
+        bottom: 5px; 
+        gap: 2px;
+    }
+    .scroll-bar-track { height: 1px; }
+
+    /* 强制限制图片高度，给底部留出空间 */
+    .gallery-item img {
+        /* 不要撑满 100%，只占 85%，留出底部给进度条和手指操作 */
+        max-height: 85% !important; 
+        /* 稍微往上提一点 */
+        transform: translateY(-5%); 
+    }
+    
+    /* 视频也要同步限制 */
+    .video-item iframe {
+        height: 85% !important;
+        /* 保持居中 */
+        margin: auto;
+    }
+
+    /* D. 右侧文字区域 (关键：开启内部滚动) */
+    .info-section {
+        padding-right: 5px;
+        
+        /* 【关键修复 3】开启内部滚动，并给底部留足空间 */
+        overflow-y: auto; 
+        height: 100%; 
+        padding-bottom: 120px !important;
+    }
+
+    .project-title {
+        font-size: 16px; /* 标题再小一点 */
+        margin-bottom: 5px;
+        line-height: 1.1;
+    }
+    
+    .divider-line { margin: 5px 0; }
+
+    .text-body {
+        font-size: 10px; /* 正文变很小，适应阅读 */
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+    
+    /* E. 参数框缩小 */
+    .specs-box {
+        padding: 5px;
+        margin-top: 10px;
+        margin-bottom: 50%; /* 额外底部距离 */
+    }
+    .spec-row {
+        font-size: 9px; 
+        margin-bottom: 2px;
+    }
+    .spec-row .val {
+        padding-left: 5px;
+    }
+}

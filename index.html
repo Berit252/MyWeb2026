@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berit | Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="lang-en"> 
+    <div id="language-tag" class="industrial-panel">
+        <div class="tag-header">
+            <span class="status-dot"></span>
+            <span class="mono-label">UI_LOCALE</span>
+        </div>
+        <div class="tag-controls">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="zh">中文</button>
+        </div>
+    </div>
+
+    <main id="app-container">
+        <aside id="sidebar">
+            <div class="year-filter active" data-year="All" data-i18n="filter.all">ALL</div>
+            <div class="year-filter" data-year="2026">2026</div>
+            <div class="year-filter" data-year="2025">2025</div>
+            <div class="year-filter" data-year="2024">2024</div>
+            <div class="year-filter" data-year="2023">2023</div>
+            <div class="year-filter" data-year="2022">2022</div>
+        </aside>
+
+        <section id="work-grid-area">
+            </section>
+
+        <section id="detail-panel" class="industrial-panel">
+            <div class="panel-inner">
+                <span class="mono-label" id="work-time">TIMESTAMP: 00.00</span>
+                <h1 id="work-title">SELECT A PROJECT</h1>
+                <div class="divider"></div>
+                <h3 class="section-label" data-i18n="label.intro">Intro.</h3>
+                <p id="work-intro-text"></p>
+                
+                <button id="view-detail-btn">
+                    <span data-i18n="btn.view">VIEW_DETAILS</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <nav id="footer-nav">
+    <div class="nav-links">
+        <a href="#" id="contact-btn" class="nav-item" data-i18n="nav.contact">CONTACT</a>
+        <a href="indexCV.html" class="nav-item" data-i18n="nav.cv">CV</a>
+
+        <div class="nav-group">
+            <div class="nav-item trigger">
+                <span data-i18n="nav.video">VIDEOS</span>
+                <div class="active-indicator"></div>
+            </div>
+            <div class="popup-menu industrial-panel">
+                <a href="https://www.youtube.com/@berittang" target="_blank">YOUTUBE</a>
+                <a href="https://b23.tv/TvHLMR0" target="_blank">BILIBILI</a>
+                <a href="https://xhslink.com/m/1vX4FtX6SWf" target="_blank">REDNOTE</a>
+            </div>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-item trigger">
+                <span data-i18n="nav.other">OTHERS</span>
+                <div class="active-indicator"></div>
+            </div>
+            <div class="popup-menu industrial-panel">
+                <a href="https://berit252.github.io/SPW/" target="_blank">SPW 1.1</a>
+                <a href="https://berit252.github.io/SPW2.0/" target="_blank">SPW 2.0</a>
+                <a href="https://berittang252.artstation.com/" target="_blank">ARTSTATION</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <script src="script.js"></script>
+</body>
+</html>

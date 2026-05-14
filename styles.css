@@ -1,0 +1,602 @@
+:root {
+    /* 还原初始定义的字体 */
+    --font-en: "Black Ops One", system-ui;
+    --font-zh: "Noto Sans SC", sans-serif;
+    
+    --bg: #0a0a0b;
+    --surface: #161618;
+    --border: #2a2a2c;
+    --text-dim: #888;
+    --text-bright: #f5f5f7;
+    --accent: #ff4500; /* 工业橙 */
+    --radius: 12px;
+}
+
+/* 基础设置 */
+body {
+    background: var(--bg);
+    color: var(--text-bright);
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 根据语言切换字体 */
+body.lang-en { font-family: var(--font-en); }
+body.lang-zh { font-family: var(--font-zh); }
+
+/* --- 修改后的主容器：添加跑马灯效果 --- */
+#app-container {
+    display: flex;
+    width: 85vw;           
+    height: 80vh;          
+    padding: 50px;         
+    gap: 40px;             
+    box-sizing: border-box;
+    
+    /* 1. 核心修改：去掉原本的 border，改为相对定位和溢出隐藏 */
+    position: relative;
+    overflow: hidden;
+    border: none; 
+    border-radius: var(--radius);
+    
+    /* 2. 背景设置：这里的背景会被下面的 ::after 遮罩覆盖，所以这里可以设为透明 */
+    background: transparent; 
+    backdrop-filter: blur(10px);
+}
+
+/* 3. 跑动的灯光带 (::before) */
+#app-container::before {
+    content: '';
+    position: absolute;
+    /* 创建一个巨大的正方形旋转，确保覆盖边缘 */
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    /* 使用圆锥渐变实现灯带效果：橙色占一小段，其余透明 */
+    background: conic-gradient(
+        transparent, 
+        var(--accent), 
+        transparent 30%
+    );
+    animation: rotate-border 4s linear infinite;
+    z-index: -2; /* 放在最底层 */
+}
+
+/* 4. 内层遮罩 (::after) - 保持原本的背景色 */
+#app-container::after {
+    content: '';
+    position: absolute;
+    /* 留出 1px 的边隙展示灯带 */
+    inset: 1px;
+    background: rgba(18, 18, 20, 0.95); /* 还原你之前的深色背景 */
+    border-radius: var(--radius);
+    z-index: -1; /* 放在内容下方，灯带上方 */
+}
+
+/* 5. 旋转动画定义 */
+@keyframes rotate-border {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 侧边栏：年份选择 */
+#sidebar {
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    position: relative; /* 确保在遮罩之上 */
+}
+
+.year-filter {
+    font-family: var(--font-en);
+    font-size: 14px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: 0.3s;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 2px;
+}
+
+.year-filter.active {
+    color: var(--accent);
+}
+
+/* 网格系统 */
+#work-grid-area {
+    flex: 1.6;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-gap: 15px;                         
+    align-content: start;                   
+    overflow-y: auto;
+    padding-right: 15px;
+    position: relative; /* 确保在遮罩之上 */
+}
+
+/* 自定义滚动条 */
+#work-grid-area::-webkit-scrollbar { width: 4px; }
+#work-grid-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* 作品格子 */
+.work-card {
+    background: var(--surface);
+    border-radius: 8px; 
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    aspect-ratio: 1 / 1; 
+    cursor: pointer;
+    box-sizing: border-box; /* 确保边框变粗时内部图片不偏移 */
+}
+
+.work-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 默认状态：彻底黑白化，并略微降低亮度突出暗黑风 */
+    filter: grayscale(1) brightness(0.8); 
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.work-card:hover {
+    border-color: var(--text-dim);
+    transform: translateY(-4px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.work-card:hover img {
+    /* 清除灰度，恢复真实色彩与饱和度 */
+    filter: grayscale(0) brightness(1); 
+}
+
+.work-card.active {
+    border: 2px solid var(--accent); /* 保持橙红色加粗边框 */
+    transform: translateY(-4px);     /* 保持轻微悬浮感 */
+    box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3); /* 橙红色工业光晕 */
+}
+
+.work-card.active img {
+    filter: grayscale(0) brightness(1); 
+}
+
+/* 详情面板 */
+#detail-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-left: 1px solid var(--border);
+    padding-left: 40px;
+    position: relative; /* 确保在遮罩之上 */
+}
+
+#work-time {
+    font-family: var(--font-en);
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+#work-title {
+    font-family: inherit;
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 25px;
+}
+
+.section-label {
+    font-family: var(--font-en);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 25px; 
+    letter-spacing: 2px;
+}
+
+#work-intro-text {
+    font-family: var(--font-zh);
+    font-size: 15px;
+    line-height: 1.8;
+    color: #ccc;
+    font-weight: 300;
+    margin-bottom: 50px; 
+}
+
+/* 详情按钮 */
+#view-detail-btn {
+    margin-top: 20px; 
+    background: transparent;
+    color: var(--text-bright);
+    border: 1px solid var(--text-bright);
+    padding: 15px 25px;
+    border-radius: 4px;
+    font-family: var(--font-en);
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 200px;
+}
+
+#view-detail-btn:hover {
+    background: var(--text-bright);
+    color: var(--bg);
+}
+
+/* 语言切换标签 */
+#language-tag {
+    position: fixed;
+    top: 30px; 
+    right: 30px;
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 100;
+}
+
+.tag-header {
+    font-family: var(--font-en);
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-dot {
+    width: 4px; height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--accent);
+}
+
+.lang-btn {
+    font-family: var(--font-en);
+    font-size: 11px;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    background: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.lang-btn.active {
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--accent);
+}
+
+/* 底部导航 */
+#footer-nav {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-group {
+    position: relative;
+}
+
+.nav-item {
+    font-family: var(--font-en);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 2px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+}
+
+.nav-item:hover, .nav-group.active .nav-item {
+    color: var(--text-bright);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.active-indicator {
+    position: absolute;
+    left: 0; top: 20%;
+    width: 2px; height: 60%;
+    background: var(--accent);
+    opacity: 0;
+    transition: 0.3s;
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.nav-group.active .active-indicator {
+    opacity: 1;
+}
+
+.popup-menu {
+    position: absolute;
+    bottom: calc(100% + 15px); 
+    left: 0;
+    min-width: 140px;
+    padding: 8px 0;
+    display: none; 
+    flex-direction: column;
+    animation: menuFadeUp 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.nav-group.active .popup-menu {
+    display: flex;
+}
+
+.popup-menu a {
+    font-family: var(--font-en);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 12px 20px;
+    letter-spacing: 1px;
+    transition: 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.popup-menu a:last-child { border-bottom: none; }
+
+.popup-menu a:hover {
+    color: var(--accent);
+    background: rgba(255, 255, 255, 0.03);
+    padding-left: 25px;
+}
+
+@keyframes menuFadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* --- 移动端专属适配 (屏幕宽度 < 768px) --- */
+@media (max-width: 768px) {
+    /* 1. 基础页面重置：允许自然滚动 */
+    body {
+        overflow-y: auto;
+        height: auto;
+        background: #0a0a0b;
+    }
+
+    /* 🚩 终极修复核心：追加清除 backdrop-filter，彻底击碎 fixed 定位降级壁垒 */
+    body, html, #app-container {
+        transform: none !important;
+        filter: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important; /* 兼容 iOS/Safari */
+        perspective: none !important;
+        contain: none !important;
+    }
+
+    /* 隐藏移动端长列表背后不可见且消耗 GPU 性能的跑马灯伪元素 */
+    #app-container::before,
+    #app-container::after {
+        display: none !important;
+    }
+
+    /* 2. 彻底隐藏年份过滤侧边栏，释放横向空间 */
+    #sidebar {
+        display: none !important;
+    }
+
+    /* 3. 主体内容区：流式布局，上下留足安全距离 */
+    #app-container {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding: 70px 12px 160px 12px;
+        margin: 0;
+        background: none;
+        border: none;
+        overflow: visible !important; /* 确保不裁切越界的弹窗 */
+    }
+    /* 4. 作品流：全宽双列排布，大图更好点 */
+    #work-grid-area {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .work-card {
+        border-radius: 8px; /* 舒适的简约圆角 */
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #161618;
+    }
+
+    /* 5. 顶部语言切换：精简左上角悬浮 */
+    #language-tag {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        right: auto;
+        background: rgba(10, 10, 11, 0.5);
+        backdrop-filter: blur(8px);
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        z-index: 1000;
+        transform: scale(0.9);
+        transform-origin: top left;
+    }
+
+    /* 6. 全屏覆盖式作品详情弹窗 */
+    #detail-panel {
+        position: fixed !important;
+        top: 0 !important; 
+        left: 0 !important;
+        width: 100vw !important; 
+        height: 100vh !important;
+        background: rgba(8, 8, 9, 0.85) !important; /* 赛博级深黑半透明遮罩 */
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        
+        z-index: 9999 !important; /* 置顶层级：完美盖过左上角语种标签和底部 2x2 导航菜单 */
+        
+        /* 采用 Flexbox 强制将内部实际装载文字的面板卡片锁定在视口绝对正中央 */
+        display: none !important; /* 默认隐藏，由 JS 挂载 active 类控制展现 */
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+        border: none !important;
+        margin: 0 !important;
+    }
+
+    /* 激活态：同步展示全屏遮罩层及居中悬浮卡片 */
+    #detail-panel.active {
+        display: flex !important;
+        opacity: 1 !important;
+    }
+
+    /* 🚩 核心 UI 升级：将内部装载核心内容的容器 (.panel-inner) 打造成精密的工业风居中悬浮弹窗 */
+    #detail-panel .panel-inner {
+        width: 100% !important;
+        max-width: 380px !important;
+        max-height: 80vh !important; /* 严格约束卡片最大高度，预留顶部与底部的视觉呼吸边距，防止顶穿视口 */
+        overflow-y: auto !important; /* 内部文案过长时自动产生丝滑自适应滚动条 */
+        
+        background: #141417 !important; /* 纯正控制台暗沉碳黑底色 */
+        border: 1px solid #2a2a2f !important;
+        border-top: 2px solid var(--accent) !important; /* 顶部嵌带高光战术橙线 */
+        border-radius: 10px !important;
+        padding: 30px 25px !important;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8) !important;
+        
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        margin: 0 !important;
+    }
+
+    /* 弹窗内部排版间距精细化调优 */
+    #detail-panel .panel-inner h1#work-title {
+        font-size: 22px !important;
+        margin: 5px 0 15px 0 !important;
+        line-height: 1.3 !important;
+    }
+
+    #detail-panel .panel-inner .divider {
+        margin: 15px 0 !important;
+    }
+
+    #detail-panel .panel-inner #work-intro-text {
+        font-size: 14px !important;
+        line-height: 1.7 !important;
+        margin-bottom: 25px !important;
+    }
+
+    #detail-panel .panel-inner #view-detail-btn {
+        max-width: 100% !important;
+        margin-top: 5px !important;
+    }
+
+    /* 🚩 核心修复 3：彻底根除遮挡与错位 Bug 的关闭按钮 (.close-modal) 重置 */
+    /* 废弃原先的 absolute 右上角脱离排布，改为文档流底部精工按钮，完美避免视口边缘裁切 */
+    #detail-panel .panel-inner .close-modal {
+        position: static !important;
+        margin-top: 25px !important;
+        padding: 12px !important;
+        background: #1c1c20 !important;
+        border: 1px solid #333 !important;
+        border-radius: 6px !important;
+        color: #888 !important;
+        font-family: var(--font-en) !important;
+        font-size: 12px !important;
+        text-align: center !important;
+        letter-spacing: 1px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+    }
+
+    #detail-panel .panel-inner .close-modal:hover {
+        background: var(--accent) !important;
+        color: #fff !important;
+        border-color: var(--accent) !important;
+    }
+
+    
+    /* 7. 终极修复：还原简约舒适的底部 2x2 方块矩阵 */
+    #footer-nav {
+        position: fixed;
+        bottom: 0; 
+        left: 0;
+        width: 100%;
+        background: #0a0a0b;
+        border-top: 1px solid var(--border);
+        padding: 12px 12px 25px 12px;
+        z-index: 2500; /* 绝对最高层级，永远可见 */
+        box-sizing: border-box;
+        
+        /* 核心代码：清除 PC 端的居中位移 Bug，让 4 个方块完美归位 */
+        transform: none; 
+    }
+
+    .nav-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 完美平分两列 */
+        gap: 8px; /* 简约舒适的方块间距 */
+        width: 100%;
+    }
+
+    .nav-group, .nav-item {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .nav-item {
+        background: var(--surface);
+        padding: 16px 5px; /* 还原原本方块的高度和扎实感 */
+        border: 1px solid var(--border);
+        font-size: 11px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        color: var(--text-bright);
+        letter-spacing: 1px;
+    }
+    
+    /* 弹出菜单优化 */
+    .popup-menu {
+        bottom: 140px;
+        left: 5%;
+        width: 90%;
+        z-index: 2600;
+        background: #161618;
+        border: 1px solid var(--border);
+    }
+}

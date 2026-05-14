@@ -1,0 +1,475 @@
+:root {
+    --bg: #0a0a0b;
+    --surface: #161618;
+    --surface-darker: #121214;
+    --border: #2a2a2c;
+    --text-bright: #f5f5f7;
+    --text-dim: #888;
+    --accent: #ff4500; /* 延续主站的工业橙 */
+    
+    --font-tactical: "Black Ops One", system-ui;
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --radius: 8px;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text-bright);
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* 页面主外壳：限制最大宽度居中，保证桌面和大屏显示极其高级 */
+.archive-detail-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 30px 100px 30px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- 导航栏设置 --- */
+.detail-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 50px;
+}
+
+.nav-back-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.nav-back-btn:hover {
+    color: var(--accent);
+}
+
+.nav-specs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 5px; 
+    height: 5px;
+    background: #00ff41; /* 极客状态绿 */
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00ff41;
+}
+
+.spec-code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+/* --- 通用工业边框外挂类 --- */
+.industrial-frame {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    overflow: hidden;
+}
+
+/* --- 媒体内容板块 --- */
+.detail-main-content {
+    flex: 1;
+}
+
+.media-section {
+    margin-bottom: 50px;
+}
+
+.section-header {
+    margin-bottom: 20px;
+}
+
+.mono-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.tactical-title {
+    font-family: var(--font-tactical);
+    font-size: 28px;
+    color: var(--text-bright);
+    margin: 0;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+
+/* 视频容器：采用现代 16:9 伪元素比例锁定法，彻底告别写死高宽变形 */
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    background: var(--surface-darker);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+}
+
+/* 板块分割线 */
+.section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 60px 0;
+}
+
+/* 音频容器优化：包裹原生控件，赋予极简视觉体系 */
+.audio-container {
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #1c1c1f; 
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.audio-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 10px;
+}
+
+.file-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-bright);
+}
+
+.file-status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+}
+
+/* 强制让原生音频控件宽度 100% 填满容器，并借用 CSS 滤镜融入深色背景 */
+audio {
+    width: 100%;
+    outline: none;
+    border-radius: 6px;
+    filter: contrast(1.1) brightness(1.2);
+}
+
+/* 借用 invert 滤镜将大多数浏览器原生的浅色 audio 播放器翻转为适配深色主题的样式 */
+audio::-webkit-media-controls-enclosure {
+    /* 将背景从过黑的 #1e1e22 提亮到更柔和、对比度更高的冷灰色 */
+    background-color: #464646; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 页脚 */
+.detail-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* --- 移动端响应式适配 --- */
+@media (max-width: 768px) {
+    .archive-detail-wrapper {
+        padding: 25px 15px 60px 15px;
+    }
+
+    .detail-nav {
+        margin-bottom: 30px;
+    }
+
+    .tactical-title {
+        font-size: 20px;
+    }
+
+    .section-divider {
+        margin: 40px 0;
+    }
+
+    .audio-container {
+        padding: 15px;
+    }
+
+    .file-name {
+        font-size: 11px;
+        /* 避免长文件名在窄屏撑破容器 */
+        word-break: break-all; 
+    }
+}
+
+/* ===================================================
+   视觉档案图集 (Filmstrip Gallery) 样式
+   =================================================== */
+
+.gallery-container {
+    background: var(--surface-darker);
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.scroll-hint {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    animation: pulseHint 2s infinite;
+}
+
+/* 🚩 核心：垂直流核心容器 */
+.vertical-gallery-wrapper {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    gap: 60px;
+    padding: 40px 20px;
+    max-height: 75vh;       
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 独立图片切片框架：取消固定高度限制，释放纵向张力 */
+.image-frame {
+    width: 100%;
+    max-width: 900px;
+    height: auto;            
+    border-radius: 6px;
+    overflow: hidden;
+    background: #050506;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    transition: border-color 0.3s ease;
+    flex-shrink: 0;       
+}
+
+.image-frame:hover {
+    border-color: var(--text-dim);
+}
+
+/* 图像完美呈现规则 */
+.image-frame img {
+    width: 100%;
+    height: auto;
+    display: block; 
+    object-fit: contain;
+}
+
+/* 定制精工垂直滚动条 */
+.vertical-gallery-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.vertical-gallery-wrapper::-webkit-scrollbar-track {
+    background: var(--surface);
+}
+
+.vertical-gallery-wrapper::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+.vertical-gallery-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--text-dim);
+}
+
+
+/* ===================================================
+   概念阐述与参数矩阵样式 (Damage.html 专用/通用)
+   =================================================== */
+
+/* 概念阐述面板 */
+.concept-block {
+    padding: 25px 30px;
+    margin-bottom: 35px;
+    background: var(--surface-darker);
+    border-left: 2px solid var(--accent); /* 左侧亮橙色强调线 */
+}
+
+.block-label {
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 8px;
+}
+
+.statement-en {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-bright); 
+    margin: 0 0 10px 0;
+}
+
+.statement-zh {
+    font-size: 13px; 
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin: 0;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+/* 参数与动作指令矩阵 */
+.metadata-matrix {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.specs-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--surface);
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.spec-row {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.spec-label {
+    color: var(--accent);
+    min-width: 90px;
+}
+
+.spec-value {
+    color: var(--text-bright);
+}
+
+.spec-value.flex-wrap {
+    line-height: 1.5;
+    color: #ccc;
+    font-family: var(--font-sans);
+    font-size: 13px;
+}
+
+/* 独立按钮面板 */
+.action-panel {
+    flex: 1;
+    display: flex;
+    height: 100%;
+}
+
+.industrial-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--text-bright);
+    border: 1px solid var(--text-bright);
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.industrial-btn:hover {
+    background: var(--text-bright);
+    color: var(--bg);
+    border-color: var(--text-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.btn-icon {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+@keyframes pulseHint {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* --- 移动端相册垂直流自适应 --- */
+@media (max-width: 768px) {
+    .vertical-gallery-wrapper {
+        padding: 20px 10px;
+        gap: 25px; /* 窄屏下适当缩减图片间距 */
+        max-height: 65vh; 
+    }
+
+    .image-frame {
+        width: 100%;
+        border-radius: 4px;
+    }
+
+    .gallery-header {
+        padding: 10px 15px;
+    }
+
+    .scroll-hint {
+        font-size: 9px;
+    }
+
+    .metadata-matrix {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .specs-panel, .action-panel {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .concept-block {
+        padding: 20px;
+    }
+}
