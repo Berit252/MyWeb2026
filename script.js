@@ -4,8 +4,8 @@ const projectData = [
         id: 1, year: 2022, 
         title_en: "Queuing for the Unknown", title_zh: "排队等待未知", 
         time: "2022.10", 
-        intro_en: "..", 
-        intro_zh: "一组合作作品。",
+        intro_en: ".A group work. We printed multiple photo copies of us, and connected them to build a long queue, from one side of the wall to another side.", 
+        intro_zh: "一组合作作品。我们打印了多份我们的排队照片，并将它们连接起来，排成一条更加长的队，从墙的一侧延伸到另一侧。",
         small_img: "https://i.postimg.cc/3wq1QJwZ/2022-10-23-00-38-52.png", 
         link: "DetailPages/QueuingUnknown.html"
     },
@@ -13,8 +13,8 @@ const projectData = [
         id: 2, year: 2022, 
         title_en: "Emotion Value", title_zh: "情绪价值", 
         time: "2022.11", 
-        intro_en: "..", 
-        intro_zh: "..",
+        intro_en: "Workers are asked to work like machines and subjective feelings are encrypted.", 
+        intro_zh: "工人被要求像机器一样工作，主观感受被加密。",
         small_img: "https://i.postimg.cc/JnCTH25G/sha256-7.png", 
         link: "DetailPages/EmotionValue.html"
     },
@@ -22,8 +22,8 @@ const projectData = [
         id: 3, year: 2022, 
         title_en: "Damage", title_zh: "伤", 
         time: "2022.11", 
-        intro_en: "..", 
-        intro_zh: "..",
+        intro_en: "We invited the passing audiences to touch and push the scars on the canvas. The burst balloons are like the people who are crashed.", 
+        intro_zh: "我们邀请过路的观众触碰和推压画布上的伤痕。爆裂的气球就如同刚刚遭受过打击的人们。",
         small_img: "https://i.postimg.cc/j20hCgP3/y22-pairings-show-24.jpg", 
         link: "DetailPages/Damage.html"
     },
@@ -31,8 +31,8 @@ const projectData = [
         id: 4, year: 2022, 
         title_en: "Falling of Hidden Emotions", title_zh: "隐匿情感的坠落", 
         time: "2022.11", 
-        intro_en: "..", 
-        intro_zh: "..",
+        intro_en: "I encrypted the words of emotions into digital values by using hash function CRC-32.", 
+        intro_zh: "我使用哈希函数CRC-32将情感的词语加密为数字值。",
         small_img: "https://i.postimg.cc/tgckGCTQ/C042.jpg", 
         link: "DetailPages/FallingOfHiddenEmotions.html"
     },
@@ -40,8 +40,8 @@ const projectData = [
         id: 5, year: 2023, 
         title_en: "Please Hold My Hand", title_zh: "请握住我的手", 
         time: "2023.03", 
-        intro_en: "..", 
-        intro_zh: "..",
+        intro_en: "An installation that interacts by holding the hand.", 
+        intro_zh: "一个用握手来交互的装置。",
         small_img: "https://i.postimg.cc/brx9nx9M/wu-guanproject-88.jpg", 
         link: "DetailPages/PleaseHoldMyHand.html"
     },  
@@ -137,12 +137,21 @@ const projectData = [
     },
     { 
         id: 16, year: 2026, 
-        title_en: "Robo World 3.0", title_zh: "Robo World 3.0", 
+        title_en: "Robo World 3.0 (Onsite V1)", title_zh: "Robo World 3.0 - Swan版本", 
         time: "2026.04", 
         intro_en: "Using a 2D game to show interactions between different robos.", 
         intro_zh: "一个以2D视觉小说为框架的多分支无限循环小游戏。",
         small_img: "https://i.postimg.cc/yY1t4b5K/DSC02765.jpg", 
-        link: "DetailPages/RoboWorld3.html"
+        link: "DetailPages/RoboWorld3_I.html"
+    },
+    { 
+        id: 17, year: 2026, 
+        title_en: "Robo World 3.1 (Onsite V2)", title_zh: "Robo World 3.1 - AV版本", 
+        time: "2026.05", 
+        intro_en: "Using a 2D game to show interactions between different robos. There is more information dropping on site.", 
+        intro_zh: "一个以2D视觉小说为框架的多分支无限循环在场小游戏。现场有更多信息掉落。",
+        small_img: "https://i.postimg.cc/L5XHDBJp/2026-05-17-151431.jpg", 
+        link: "DetailPages/RoboWorld3_II.html"
     }
 ];
 
